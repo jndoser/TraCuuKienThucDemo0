@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title CTDLGT</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script type="text/javascript" resource="@Request.Url.Scheme://@Request.Url.Host/scripts/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        var domain = "@Request.Url.Scheme://@Request.Url.Host";
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <a class="navbar-brand" href="#"><b>CẤU TRÚC DỮ LIỆU VÀ GIẢI THUẬT</b></a>
+        <div class="d-flex justify-content-end">
+            <form class="d-flex">
+            <input id="keyword" class="form-control me-2"
+                   type="search"
+                   placeholder="Search"
+                   aria-label="Search" style="font-size: 15px" />
+            <input class="btn btn-warning" type="submit" style="font-size: 15px" onclick="StartSearch()" 
+                   placeholder="Search"/>
+        </form>
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="topic">
+            <ul>
+                @{Html.RenderAction("LeftMenu", "Topic");}
+            </ul>
+        </div>
+        <div class="content">
+            <div class="container">
+                @RenderBody()
+            </div>
+        </div>
+        <div class="recommend">
+            <hr />
+            this is recommend
+            hello
+        </div>
+    </div>
+    <script type="text/javascript">
+        function StartSearch() {
+            console.log("test");
+            var keyword = $("#keyword").val();
+            var form = new FormData();
+            form.append("keyword", keyword);
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", domain + "/Home/StartSearch", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var context = xhr.responseText;
+                    var json_ct = JSON.parse(context);
+                    if (json_ct.Data.status == "OK") {
+                        window.location = "/Home/SearchResult"
+                    } else {
+                        alert("NOT FOUND");
+                    }
+                } else {
+                    alert("NOT FOUND");
+                }
+            }         
+            xhr.send(form);
+        }
+    </script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

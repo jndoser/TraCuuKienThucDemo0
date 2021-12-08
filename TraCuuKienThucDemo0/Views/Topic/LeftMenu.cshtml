@@ -1,0 +1,9 @@
+﻿@model IList<TraCuuKienThucDemo0.Models.DataAI>
+
+@{
+    string URL = @Request.Url.Scheme + "://" + @Request.Url.Host;
+}
+
+@foreach(var item in Model) {
+    <li>@Html.ActionLink(item.Title, "GoTo", new { id = item.ID })</li>
+}
